@@ -1,0 +1,5 @@
+mnist.npz
+model.npz
+__pycache__
+/testing/*
+!/testing/example.jpg
