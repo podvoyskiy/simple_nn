@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from Dataset import Dataset
 from Helper import Helper, Synapses
+from PIL import Image
 
 class NeuralNetwork:
     __EPOCHS = 3
@@ -61,9 +62,16 @@ class NeuralNetwork:
         if (os.path.isfile(f'testing/{file_name}') == False): 
             print(Helper.log(f'File testing/{file_name} is not found', Helper.COLOR_ERROR))
             return
+        
+        # Resize
+        img = Image.open(f'testing/{file_name}')
+        width, height = img.size
+        if (width != 28 or height != 28):
+            print(Helper.log(f"Image has the size {width}*{height}. Resize to 28*28", Helper.COLOR_WARNING))
+            img = img.resize((28, 28))
+            img.save(f'testing/{file_name}')
 
         test_image = plt.imread(f'testing/{file_name}', format="jpeg")
-
         # Grayscale + Unit RGB + inverse colors
         gray = lambda rgb : np.dot(rgb[... , :3] , np.array([0.299 , 0.587, 0.114]))
         test_image = 1 - (gray(test_image).astype("float32") / 255)
